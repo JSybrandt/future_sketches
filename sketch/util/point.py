@@ -1,5 +1,6 @@
 from random import random
 import math
+import collision
 
 class Point:
   def __init__(self, x, y=None):
@@ -99,6 +100,13 @@ class Point:
 
   def __eq__(self, other):
     return self.x == other[0] and self.y == other[1]
+
+  def set(self, other)->None:
+    self.x = other[0]
+    self.y = other[1]
+
+  def to_collision_vec(self)->collision.Vector:
+    return collision.Vector(self.x, self.y)
 
   @classmethod
   def RandomDirection(cls):
