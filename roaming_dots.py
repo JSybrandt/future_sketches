@@ -25,57 +25,83 @@ def video_test(
   background_color = Color(r=0.2, g=0.4, b=0.8)
 
   radius = 20
-  left = 100
-
-  high_hat_delta = (canvas_width - 200) / 2
-  base_drum_delta = high_hat_delta * 2
-
+  edge_box_width = 50
+  high_hat_margin = 200
 
   circles = [
-    # Hits base drums
     PhysicsCircle(
       radius=radius,
-      velocity=Point.Left() * canvas_width,
-      position=Point(left+radius, canvas_height/4)
-    ),
-    # Hits high hats
-    PhysicsCircle(
-      radius=radius,
-      velocity=Point.Left() * canvas_width,
-      position=Point(left+radius, 3*canvas_height/4)
-    ),
+      velocity=Point.RandomDirection() * 500,
+      position=(
+        Point.Random(
+          bounds=(canvas_width-100, canvas_height-100)
+        )
+        + (50, 50)
+      ),
+      color=Color.Random()
+    )
+    for _  in range(5)
   ]
 
   music_boxes = [
     MusicBox(
-      size=Point(100,200),
-      position=Point(left-50, canvas_height/4),
+      size=Point(edge_box_width, canvas_height),
+      position=Point(edge_box_width/2, canvas_height/2),
       color=Color(1,0,0),
-      audio_sample_name="kick"
+      audio_sample_name="kick",
     ),
     MusicBox(
-      size=Point(50,150),
-      position=Point(left+25+base_drum_delta+2*radius, canvas_height/4),
-      color=Color(1,0,1),
-      audio_sample_name="snare"
+      size=Point(edge_box_width, canvas_height),
+      position=Point(canvas_width-edge_box_width/2, canvas_height/2),
+      color=Color(1,0,0),
+      audio_sample_name="kick",
+    ),
+    MusicBox(
+      size=Point(canvas_width, edge_box_width),
+      position=Point(canvas_width/2, edge_box_width/2),
+      color=Color(1,1,0),
+      audio_sample_name="snare",
+    ),
+    MusicBox(
+      size=Point(canvas_width, edge_box_width),
+      position=Point(canvas_width/2, canvas_height-edge_box_width/2),
+      color=Color(1,1,0),
+      audio_sample_name="snare",
     ),
 
     MusicBox(
-      size=Point(30,100),
-      position=Point(left-15, 3*canvas_height/4),
-      color=Color(1,1,0),
-      audio_sample_name="high_hat_closed"
+      size=Point(edge_box_width/4, 2*edge_box_width),
+      position=Point(high_hat_margin, high_hat_margin),
+      angle=math.pi/4,
+      color=Color(.5,1,.5),
+      audio_sample_name="high_hat_closed",
     ),
     MusicBox(
-      size=Point(30,100),
-      position=Point(left+15+high_hat_delta+2*radius, 3*canvas_height/4),
-      color=Color(1,1,0),
-      audio_sample_name="high_hat_closed"
+      size=Point(edge_box_width/4, 2*edge_box_width),
+      position=Point(high_hat_margin, canvas_height-high_hat_margin),
+      angle=-math.pi/4,
+      color=Color(.5,1,.5),
+      audio_sample_name="high_hat_closed",
+    ),
+    MusicBox(
+      size=Point(edge_box_width/4, 2*edge_box_width),
+      position=Point(canvas_width-high_hat_margin, high_hat_margin),
+      angle=-math.pi/4,
+      color=Color(.5,1,.5),
+      audio_sample_name="high_hat_closed",
+    ),
+    MusicBox(
+      size=Point(edge_box_width/4, 2*edge_box_width),
+      position=Point(canvas_width-high_hat_margin, canvas_height-high_hat_margin),
+      angle=math.pi/4,
+      color=Color(.5,1,.5),
+      audio_sample_name="high_hat_closed",
     ),
   ]
 
   for c in circles:
     c.collides_with += music_boxes
+    c.collides_with += circles
   for b in music_boxes:
     b.collides_with += circles
 

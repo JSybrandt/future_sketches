@@ -45,8 +45,12 @@ class PhysicsEntity(Entity, metaclass=ABCMeta):
     Entity.collision_step(self, timestep, scene, audio_sampler)
     if not self.frozen:
       if self._post_collision_dir.magnitude() > 0:
-        self.velocity = \
-            -self._post_collision_dir.unit() * self.velocity.magnitude()
+        self.velocity += (
+            self.velocity.to_collision_vec()
+            .reflect(
+              self._post_collision_dir.to_collision_vec()
+            )
+        )
       self.move(self._post_collision_delta)
 
 
