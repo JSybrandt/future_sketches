@@ -41,8 +41,8 @@ class PhysicsEntity(Entity, metaclass=ABCMeta):
     self._post_collision_delta -= response.overlap_v
     self._post_collision_dir += response.overlap_n
 
-  def post_collision(self)->None:
-    Entity.post_collision(self)
+  def collision_step(self, timestep, scene, audio_sampler)->None:
+    Entity.collision_step(self, timestep, scene, audio_sampler)
     if not self.frozen:
       if self._post_collision_dir.magnitude() > 0:
         self.velocity = \
@@ -68,22 +68,33 @@ class PhysicsCircle(PhysicsEntity):
     )
 
 
+def size_to_collision_rect(
+    size:Point,
+    position:Point=None,
+    angle:float=0
+)->collision.Poly:
+  if position is None:
+    position = Point(0, 0)
+  bot_left = collision.Vector(-size.x/2, -size.y/2)
+  return collision.Poly(
+        pos=collision.Vector(position.x, position.y),
+        points=[
+          bot_left,
+          bot_left + Point(0, size.y),
+          bot_left + Point(size.x, size.y),
+          bot_left + Point(size.x, 0),
+        ],
+        angle=angle
+    )
+
 class PhysicsRectangle(PhysicsEntity):
   def __init__(self, size:Point, **kwargs):
     """
     Note that PhysicsRectangle.position indicates the center
     """
     PhysicsEntity.__init__(self, **kwargs)
-    bot_left = collision.Vector(-size.x/2, -size.y/2)
-    self.collision_shape = collision.Poly(
-        collision.Vector(0, 0),
-        [
-          bot_left,
-          bot_left + Point(0, size.y),
-          bot_left + Point(size.x, size.y),
-          bot_left + Point(size.x, 0),
-        ]
-    )
+    self.size = size
+    self.collision_shape = size_to_collision_rect(self.size)
 
   def draw(self, draw_ctx)->None:
     draw_ctx.polygon(

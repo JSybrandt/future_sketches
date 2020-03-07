@@ -4,7 +4,8 @@ from fire import Fire
 from pathlib import Path
 from sketch.util.point import Point
 from sketch.util.color import Color
-from sketch.entities.physics_entity import PhysicsCircle, PhysicsRectangle
+from sketch.entities.physics_entity import PhysicsCircle
+from sketch.entities.music_box import MusicBox
 from sketch.recorder import Recorder
 from sketch.scene import Scene
 from random import random
@@ -39,10 +40,12 @@ def video_test(
       velocity=Point.Right() * 100,
       position=Point(100, 500)
     ),
-    PhysicsRectangle(
-      size=Point(100,25),
+    MusicBox(
+      size=Point(150,50),
       angle=math.pi/4,
-      position=Point(500, 500)
+      position=Point(500, 500),
+      color=Color(1,0,0),
+      audio_sample_name="coin"
     ),
     PhysicsCircle(
       radius=10,

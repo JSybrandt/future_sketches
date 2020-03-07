@@ -70,12 +70,12 @@ class Entity(ABC):
   def on_collision(self, other, response:Optional[collision.Response])->None:
     """
     If this entity collides with another, update information.
-    Note, don't update the actual location of this entity until post_collision.
+    Note, don't update the actual location of this entity until collision_step.
     """
     pass
 
   # Optional Override
-  def post_collision(self)->None:
+  def collision_step(self, timestep, scene, audio_sampler)->None:
     """
     After all collisions have happened, take a step in response.
     """

@@ -50,7 +50,11 @@ class Scene(object):
     # Update based on collisions
     for entity in self.action_order:
       if entity.active:
-        entity.post_collision()
+        entity.collision_step(
+            timestep=timestep,
+            scene=self,
+            audio_sampler=audio_sampler
+        )
 
 
 
