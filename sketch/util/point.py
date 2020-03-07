@@ -68,11 +68,15 @@ class Point:
       y=self.y/scale
     )
 
-  def length(self):
+  def __neg__(self):
+    return self * -1
+
+
+  def magnitude(self):
     return math.sqrt(self.x**2 + self.y**2)
 
   def unit(self):
-    return self / self.length()
+    return self / self.magnitude()
 
   def __str__(self):
     return f"({self.x}, {self.y})"
@@ -107,7 +111,18 @@ class Point:
         y=bounds[1]*random()
     )
 
-UP = Point(x=0, y=-1)
-DOWN = Point(x=0, y=1)
-LEFT = Point(x=-1, y=0)
-RIGHT = Point(x=1, y=0)
+  @classmethod
+  def Left(cls):
+    return Point(x=-1, y=0)
+
+  @classmethod
+  def Right(cls):
+    return Point(x=1, y=0)
+
+  @classmethod
+  def Up(cls):
+    return Point(x=0, y=-1)
+
+  @classmethod
+  def Down(cls):
+    return Point(x=0, y=1)

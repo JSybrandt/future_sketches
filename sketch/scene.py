@@ -35,9 +35,24 @@ class Scene(object):
   def step(self, timestep:float, audio_sampler:AudioSampler):
     self._establish_order()
     self._clock += timestep
+    # All Step
     for entity in self.action_order:
       if entity.active:
         entity.step(timestep=timestep, scene=self, audio_sampler=audio_sampler)
+    # All prepare for collisions
+    for entity in self.action_order:
+      if entity.active:
+        entity.pre_collision()
+    # All check collisions
+    for entity in self.action_order:
+      if entity.active:
+        entity.check_collisions()
+    # Update based on collisions
+    for entity in self.action_order:
+      if entity.active:
+        entity.post_collision()
+
+
 
   def draw(self, draw_ctx:Draw):
     self._establish_order()
