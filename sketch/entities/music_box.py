@@ -15,7 +15,7 @@ class MusicBox(PhysicsRectangle):
     # Used to animate a "bounce"
     self._scale = 1.0
     self._scale_rate = 1
-    self._on_collision_scale = 1.1
+    self._on_collision_scale = 1.2
 
 
   def step(self, timestep, scene, audio_sampler)->None:

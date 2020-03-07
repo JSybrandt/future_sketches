@@ -24,39 +24,62 @@ def video_test(
   canvas_size = Point(canvas_width, canvas_height)
   background_color = Color(r=0.2, g=0.4, b=0.8)
 
-  entities = [
+  radius = 20
+  left = 100
+
+  high_hat_delta = (canvas_width - 200) / 2
+  base_drum_delta = high_hat_delta * 2
+
+
+  circles = [
+    # Hits base drums
     PhysicsCircle(
-      radius=25,
-      velocity=Point.Right() * 100,
-      position=Point(100, 110)
+      radius=radius,
+      velocity=Point.Left() * canvas_width,
+      position=Point(left+radius, canvas_height/4)
     ),
+    # Hits high hats
     PhysicsCircle(
-      radius=25,
-      velocity=Point.Left() * 100,
-      position=Point(500, 100)
-    ),
-    PhysicsCircle(
-      radius=25,
-      velocity=Point.Right() * 100,
-      position=Point(100, 500)
-    ),
-    MusicBox(
-      size=Point(150,50),
-      angle=math.pi/4,
-      position=Point(500, 500),
-      color=Color(1,0,0),
-      audio_sample_name="coin"
-    ),
-    PhysicsCircle(
-      radius=10,
-      color=Color(0,1,0),
-      acceleration=Point.Down()*100,
-      position=Point(500, 325),
+      radius=radius,
+      velocity=Point.Left() * canvas_width,
+      position=Point(left+radius, 3*canvas_height/4)
     ),
   ]
 
-  for entity in entities:
-    entity.collides_with = entities
+  music_boxes = [
+    MusicBox(
+      size=Point(100,200),
+      position=Point(left-50, canvas_height/4),
+      color=Color(1,0,0),
+      audio_sample_name="kick"
+    ),
+    MusicBox(
+      size=Point(50,150),
+      position=Point(left+25+base_drum_delta+2*radius, canvas_height/4),
+      color=Color(1,0,1),
+      audio_sample_name="snare"
+    ),
+
+    MusicBox(
+      size=Point(30,100),
+      position=Point(left-15, 3*canvas_height/4),
+      color=Color(1,1,0),
+      audio_sample_name="high_hat_closed"
+    ),
+    MusicBox(
+      size=Point(30,100),
+      position=Point(left+15+high_hat_delta+2*radius, 3*canvas_height/4),
+      color=Color(1,1,0),
+      audio_sample_name="high_hat_closed"
+    ),
+  ]
+
+  for c in circles:
+    c.collides_with += music_boxes
+  for b in music_boxes:
+    b.collides_with += circles
+
+  entities = circles + music_boxes
 
   scene = Scene(
       canvas_size=canvas_size,
@@ -71,7 +94,10 @@ def video_test(
       canvas_size=canvas_size,
       duration=duration,
       audio_samples={
-        "coin": "./sounds/coin.mp3"
+        "coin": "./sounds/coin.mp3",
+        "kick": "./sounds/kick.mp3",
+        "snare": "./sounds/snare.wav",
+        "high_hat_closed": "./sounds/high_hat_closed.wav",
       },
   )
 
