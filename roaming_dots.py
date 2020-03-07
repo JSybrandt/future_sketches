@@ -4,7 +4,7 @@ from fire import Fire
 from pathlib import Path
 from sketch.util.point import Point
 from sketch.util.color import Color
-from sketch.entity import Entity
+from sketch.entities.entity import Entity
 from sketch.recorder import Recorder
 from sketch.scene import Scene
 from random import random

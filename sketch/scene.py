@@ -1,4 +1,4 @@
-from sketch.entity import Entity
+from sketch.entities.entity import Entity
 from sketch.util.point import Point
 from sketch.util.color import Color
 from typing import List, Optional
