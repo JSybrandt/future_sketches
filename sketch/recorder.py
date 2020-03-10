@@ -29,7 +29,6 @@ class Recorder(object):
       out_path:Path,
       canvas_size:Point,
       duration:float,
-      audio_samples:Dict[str, Path]=None,
       silence_pbar=False,
       tmp_dir="/tmp"
   ):
@@ -39,7 +38,6 @@ class Recorder(object):
     framerate - frames per second
     out_path - where to put the video. Expected to be a .mp4
     canvas_size - x/y = width/height of output video
-    audio_samples - name 2 audio path. Used in a Sampler to add audio.
     duration - seconds long the video is
     silence_pbar - if true, don't tqdm
     tmp_dir - used to write a mp4 and a wav. These will get merged.
@@ -75,7 +73,6 @@ class Recorder(object):
       print("Warning, removing", self.tmp_audio)
       self.tmp_audio.unlink()
     self.audio_sampler = AudioSampler(
-        audio_samples=audio_samples,
         duration=duration,
         out_path=self.tmp_audio
     )

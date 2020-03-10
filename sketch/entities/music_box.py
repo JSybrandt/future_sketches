@@ -1,16 +1,18 @@
 from sketch.entities.physics_entity import PhysicsRectangle
-from sketch.entities.physics_entity import size_to_collision_rect
+from sketch.entities.physics_entity import to_collision_rect
 import collision
+from sketch.sounds import SoundDescription
+from random import choice
 
 class MusicBox(PhysicsRectangle):
   """
   The music box does not move, but makes a sound whenever something collides
-  with it.
+  with it. Plays a random selection of its internal sounds.
   """
-  def __init__(self, audio_sample_name:str, **kwargs):
+  def __init__(self, sounds:SoundDescription, **kwargs):
     PhysicsRectangle.__init__(self, **kwargs)
     self.frozen=True
-    self.audio_sample_name = audio_sample_name
+    self.sounds = sounds
     self._collided_this_frame = False
     # Used to animate a "bounce"
     self._scale = 1.0
@@ -36,7 +38,8 @@ class MusicBox(PhysicsRectangle):
   def collision_step(self, timestep, scene, audio_sampler)->None:
     PhysicsRectangle.collision_step(self, timestep, scene, audio_sampler)
     if self._collided_this_frame:
-      audio_sampler.trigger(self.audio_sample_name, scene.clock)
+      sound = choice(self.sounds)
+      audio_sampler.trigger(sound, scene.clock)
       self._scale = self._on_collision_scale
 
   def draw(self, draw_ctx)->None:
@@ -49,7 +52,7 @@ class MusicBox(PhysicsRectangle):
       draw_ctx.polygon(
           [
             (p.x, p.y) for p in
-            size_to_collision_rect(
+            to_collision_rect(
               size=self.size * self._scale,
               position=self.position,
               angle=self.angle

@@ -51,6 +51,7 @@ class PhysicsEntity(Entity, metaclass=ABCMeta):
               self._post_collision_dir.to_collision_vec()
             )
         )
+        self.velocity *= 0.8
       self.move(self._post_collision_delta)
 
 
@@ -72,7 +73,7 @@ class PhysicsCircle(PhysicsEntity):
     )
 
 
-def size_to_collision_rect(
+def to_collision_rect(
     size:Point,
     position:Point=None,
     angle:float=0
@@ -98,7 +99,7 @@ class PhysicsRectangle(PhysicsEntity):
     """
     PhysicsEntity.__init__(self, **kwargs)
     self.size = size
-    self.collision_shape = size_to_collision_rect(self.size)
+    self.collision_shape = to_collision_rect(self.size)
 
   def draw(self, draw_ctx)->None:
     draw_ctx.polygon(
