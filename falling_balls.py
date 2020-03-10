@@ -18,7 +18,7 @@ import math
 
 
 
-def video_test(
+def main(
     canvas_width=800,
     canvas_height=800,
     out_path="test.mp4",
@@ -123,5 +123,5 @@ def video_test(
 
 
 if __name__ == "__main__":
-  Fire(video_test)
+  Fire(main)
 
